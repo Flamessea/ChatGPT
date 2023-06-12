@@ -17,30 +17,34 @@ class HttpClient {
     this.accessToken = token;
   }
 
-  public async get<T>(url: string, options?: RequestOptions): Promise<T> {
+  public async get(url: string, options?: RequestOptions): Promise<Response> {
     try {
       const requestOptions = this.prepareRequestOptions(options);
-      const response = await fetch(this.baseUrl + url, requestOptions);
-      const data: T = await response.json();
-      return data;
+      const response: Response = await fetch(
+        this.baseUrl + url,
+        requestOptions
+      );
+      return response;
     } catch (error) {
       this.handleError(error);
       throw error;
     }
   }
 
-  public async post<T>(
+  public async post(
     url: string,
     body?: any,
     options?: RequestOptions
-  ): Promise<T> {
+  ): Promise<Response> {
     try {
       const requestOptions = this.prepareRequestOptions(options);
       requestOptions.method = "POST";
       requestOptions.body = JSON.stringify(body);
-      const response = await fetch(this.baseUrl + url, requestOptions);
-      const data: T = await response.json();
-      return data;
+      const response: Response = await fetch(
+        this.baseUrl + url,
+        requestOptions
+      );
+      return response;
     } catch (error) {
       this.handleError(error);
       throw error;

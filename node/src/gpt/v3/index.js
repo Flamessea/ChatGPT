@@ -1,34 +1,31 @@
-const { Configuration, OpenAIApi } = require("openai");
+const OpenAI = require("../../utils/openai");
 
-const initConfig = {
-  organization: process.env.OPENAI_ORGANIZATION_ID,
-  apiKey: process.env.OPENAI_API_KEY,
+const chatGPT = new OpenAI(process.env.OPENAI_API_KEY);
+
+const completions = (message) => {
+  return chatGPT.completions(
+    {
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are a user",
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+      temperature: 0.7,
+      max_tokens: 100,
+      stream: true,
+    },
+    {
+      responseType: "stream",
+    }
+  );
 };
 
-class GptV3 {
-  constructor(config) {
-    this.configuration = new Configuration(config || initConfig);
-  }
-
-  get gptV3() {
-    if (!global.GptV3) {
-      global.GptV3 = new OpenAIApi(this.configuration);
-    }
-    return global.GptV3;
-  }
-
-  async getListModels() {
-    return await this.gptV3.listModels();
-  }
-
-  async sendMessage(message) {
-    return await this.gptV3.createCompletion({
-      model: "text-davinci-003",
-      prompt: message,
-      max_tokens: 7,
-      temperature: 0,
-    });
-  }
-}
-
-module.exports = GptV3;
+module.exports = {
+  completions,
+};

@@ -13,13 +13,12 @@ function createApiRouter(dirPath, app) {
         .replace(".js", "")
         .replace(".", "")
         .replace(__dirname, "")
-        .replace("\\", "/");
-      const handler = require(filePath);
-      app.get(routePath === "/apis/index" ? "/apis" : routePath, handler);
+        .replace("\\", "/")
+        .replace("/apis", "");
+      const { handler, methods } = require(filePath);
+      app[methods](routePath === "/index" ? "/" : routePath, handler);
     }
   });
 }
 
-module.exports = {
-  createApiRouter,
-};
+module.exports = createApiRouter;
