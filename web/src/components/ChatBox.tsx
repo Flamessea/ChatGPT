@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SendMessageInput from "./SendMessageInput";
 import MessageBox from "./MessageBox";
 import Introduction from "./Introduction";
